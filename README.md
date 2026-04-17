@@ -125,7 +125,7 @@ Cross-validation:
 3. Run the notebook:
 
 ```bash
-jupyter notebook notebooks/ICU_Prediction_Final.ipynb
+jupyter notebook notebooks/icu_deterioration_prediction.ipynb
 ```
 
 ---
