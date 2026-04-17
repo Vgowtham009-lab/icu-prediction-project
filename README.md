@@ -29,6 +29,8 @@ The dataset used is from the PhysioNet 2012 Challenge:
 * Target:
 
   * In-hospital mortality (binary classification)
+ Note: The dataset is not included in this repository due to size.
+ Please refer to the data/README.md file for instructions on downloading and organising the dataset locally.
 
 
 ---
