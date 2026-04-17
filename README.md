@@ -142,9 +142,5 @@ Chen, T. and Guestrin, C. (2016) *XGBoost: A Scalable Tree Boosting System*. arX
 
 ## Author
 
-Gowtham Vaddanam
-
-MSc Data Science
-
-University of Hertfordshire
+Gowtham Vaddanam | MSc Data Science | University of Hertfordshire
 
