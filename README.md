@@ -124,9 +124,14 @@ Cross-validation:
 
 ## How to Run
 
-1. Download dataset from PhysioNet
-2. Place data in `/data/` directory
-3. Run the notebook:
+1. Clone the repository:
+git clone https://github.com/Vgowtham009-lab/icu-prediction-project.git
+cd icu-prediction-project
+2. Install dependencies:
+pip install -r requirements.txt
+3. Download dataset from PhysioNet
+4. Place data in `/data/` directory
+5. Run the notebook:
 
 ```bash
 jupyter notebook notebooks/icu_deterioration_prediction.ipynb
@@ -136,7 +141,6 @@ jupyter notebook notebooks/icu_deterioration_prediction.ipynb
 
 ## References (Harvard Style)
 
-Goldberger, A.L. et al. (2000) *PhysioBank, PhysioToolkit, and PhysioNet*. Circulation.
 
 Silva, I. et al. (2012) *Predicting in-hospital mortality of ICU patients: The PhysioNet/Computing in Cardiology Challenge 2012*.
 
