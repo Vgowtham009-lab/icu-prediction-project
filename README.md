@@ -52,7 +52,7 @@ Time-series data was transformed into interpretable summary features:
 * Mean, Min, Max
 * Last observed value
 * Standard deviation
-* Linear trend (slope)
+* Linear trend (slope over time)
 
 ### Models
 
