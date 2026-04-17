@@ -1,6 +1,11 @@
 
 # Early Prediction of Clinical Deterioration Risk in ICU Patients
 
+## Repository Structure
+- `notebooks/icu_deterioration_prediction.ipynb` — main end-to-end notebook
+- `outputs/` — generated plots and figures
+- `data/` — place the downloaded PhysioNet files here
+- `requirements.txt` — Python dependencies
 ## Overview
 
 This project focuses on early prediction of clinical deterioration risk in ICU patients using physiological measurements collected during the initial hours of admission.
