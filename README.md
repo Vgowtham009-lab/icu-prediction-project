@@ -81,6 +81,17 @@ Cross-validation:
 | 24h    | 0.807 |
 | 48h    | 0.867 |
 
+## Visual Results
+
+### ROC Curve Comparison
+![ROC Curve](outputs/roc_curve_comparison.png)
+
+### Time-Window Sensitivity
+![Time Window Sensitivity](outputs/time_window_sensitivity.png)
+
+### Top Predictive Features
+![Top Features](outputs/top_features_plot.png)
+
 ---
 
 ## Key Insights
