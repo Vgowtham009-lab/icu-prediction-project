@@ -30,6 +30,8 @@ The dataset used is from the PhysioNet 2012 Challenge:
 
   * In-hospital mortality (binary classification)
  
+ This dataset is publicly available for research purposes via PhysioNet.
+ 
     
  Note: The dataset is not included in this repository due to size.
  Please refer to the data/README.md file for instructions on downloading and organising the dataset locally.
