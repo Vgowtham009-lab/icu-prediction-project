@@ -1,156 +1,194 @@
-
 # Early Prediction of Clinical Deterioration Risk in ICU Patients
 
-
 ## Overview
+This project focuses on the **early prediction of clinical deterioration risk** in ICU patients using physiological measurements collected during the initial hours of ICU admission.
 
-This project focuses on early prediction of clinical deterioration risk in ICU patients using physiological measurements collected during the initial hours of admission.
+The task is framed as a **prognostic modelling problem**, where the goal is to estimate the probability of **future in-hospital mortality** using early time-series clinical data. In-hospital mortality is treated here as a proxy for severe clinical deterioration risk.
 
-The task is framed as a **prognostic modelling problem**, where the goal is to estimate the probability of **future in-hospital mortality** using early time-series clinical data.
+---
 
 ## Repository Structure
-- `notebooks/icu_deterioration_prediction.ipynb` — main end-to-end notebook
-- `outputs/` — generated plots and figures
-- `data/` — place the downloaded PhysioNet files here
-- `requirements.txt` — Python dependencies
+- `notebooks/icu_deterioration_prediction.ipynb` — main end-to-end notebook  
+- `outputs/` — generated plots and figures  
+- `data/` — dataset instructions and download guidance  
+- `requirements.txt` — Python dependencies  
 
 ---
 
 ## Dataset
+The dataset used is from the **PhysioNet 2012 Challenge**:
 
-The dataset used is from the PhysioNet 2012 Challenge:
+- Source: https://physionet.org/content/challenge-2012/1.0.0/  
+- 4,000 ICU patient stays (Set A)  
+- Includes:
+  - Static features such as Age, Gender, Height, Weight, and ICUType  
+  - 37 time-series physiological and laboratory variables  
+- Target:
+  - In-hospital mortality (binary classification)  
 
-* Source: https://physionet.org/content/challenge-2012/1.0.0/
-* 4,000 ICU patient stays (Set A)
-* Includes:
-
-  * Static features (Age, Gender, ICUType, etc.)
-  * 37 time-series physiological variables
-* Target:
-
-  * In-hospital mortality (binary classification)
- 
- This dataset is publicly available for research purposes via PhysioNet.
- 
-    
- Note: The dataset is not included in this repository due to size.
- Please refer to the data/README.md file for instructions on downloading and organising the dataset locally.
-
+The raw dataset is not included in this repository. Please refer to `data/README.md` for instructions on downloading and organising the dataset locally.
 
 ---
 
 ## Methodology
 
 ### Preprocessing
-
-* Converted timestamps (HH:MM → hours)
-* Replaced missing values (-1 → NaN)
-* Filtered data based on observation windows (6h, 12h, 24h, 48h)
+- Converted timestamps from `HH:MM` to continuous hours  
+- Replaced coded missing values (`-1`) with `NaN`  
+- Filtered observations using time windows: 6h, 12h, 24h, and 48h  
 
 ### Feature Engineering
-
-Time-series data was transformed into interpretable summary features:
-
-* Mean, Min, Max
-* Last observed value
-* Standard deviation
-* Linear trend (slope over time)
+Irregular ICU time-series data was transformed into summary features:
+- Mean  
+- Minimum  
+- Maximum  
+- Last observed value  
+- Standard deviation  
+- Linear trend (slope)  
 
 ### Models
-
-* Random Forest
-* XGBoost (best performing)
-* Multi-Layer Perceptron (MLP)
+- Random Forest  
+- XGBoost  
+- Multi-Layer Perceptron (MLP)  
 
 ---
 
 ## Results
 
-| Model         |   ROC-AUC |
-| ------------- | --------: |
-| Random Forest |     0.873 |
-| XGBoost       |     0.890 |
-| Tuned XGBoost | **0.897** |
-| MLP           |     0.756 |
+### Model Performance
 
-Cross-validation:
+| Model | ROC-AUC |
+|------|--------:|
+| Random Forest | 0.868 |
+| XGBoost | 0.883 |
+| Tuned XGBoost | **0.892** |
+| MLP | 0.661 |
 
-* Mean AUC: 0.850
-* Std: 0.007
+Cross-validation (XGBoost):
+- Mean AUC: **0.864**
+- Std: **0.016**
 
-### Time-Window Analysis
-
-| Window |   AUC |
-| ------ | ----: |
-| 6h     | 0.763 |
-| 12h    | 0.791 |
-| 24h    | 0.807 |
-| 48h    | 0.867 |
-
-## Visual Results
-
-### ROC Curve Comparison
-![ROC Curve](outputs/roc_curve_comparison.png)
+---
 
 ### Time-Window Sensitivity
-![Time Window Sensitivity](outputs/time_window_sensitivity.png)
 
-### Top Predictive Features
+| Window (hours) | Random Forest | XGBoost |
+|---------------|--------------:|--------:|
+| 6  | 0.796 | 0.767 |
+| 12 | 0.807 | 0.800 |
+| 24 | 0.838 | 0.862 |
+| 48 | 0.868 | 0.887 |
+
+---
+
+### Threshold Tuning (Clinical Perspective)
+
+Default threshold (**0.5**) was adjusted to **0.3** to improve detection of high-risk patients.
+
+**Confusion Matrix (threshold = 0.3):**
+- TN = 663  
+- FP = 26  
+- FN = 67  
+- TP = 44  
+
+**Metrics:**
+- Precision ≈ **0.63**  
+- Recall ≈ **0.40**  
+
+This improves sensitivity (recall) at the cost of more false positives — a clinically meaningful trade-off.
+
+---
+
+## Visualisations
+
+### ROC Curve
+![ROC Curve](outputs/roc_curve_comparison.png)
+
+### Time Window Sensitivity
+![Time Window](outputs/time_window_sensitivity_both.png)
+
+### Target Distribution
+![Target](outputs/target_distribution.png)
+
+### Missing Data Profile
+![Missingness](outputs/missingness_top10.png)
+
+### Heart Rate Distribution
+![HR Mean](outputs/hr_mean_distribution.png)
+
+### Feature Importance
 ![Top Features](outputs/top_features_plot.png)
+
+### SHAP Interpretation
+![SHAP](outputs/shap_summary_plot.png)
+
+### Confusion Matrix (Threshold = 0.3)
+![Confusion Matrix](outputs/confusion_matrix_xgb.png)
 
 ---
 
 ## Key Insights
+- Early ICU data already contains useful predictive signals  
+- XGBoost consistently outperforms other models  
+- Performance improves with longer observation windows  
+- Neurological (GCS), renal (BUN), and metabolic features are strong predictors  
+- Threshold tuning significantly improves detection of high-risk patients  
 
-* Early ICU data (within 6–12 hours) already provides useful predictive signal.
-* XGBoost performs best for structured clinical data.
-* Neurological, renal, and respiratory variables are strong predictors.
+---
+
+## Clinical Interpretation
+The default model (threshold = 0.5) misses a significant number of high-risk patients.  
+Lowering the threshold to **0.3** improves recall, making the model more suitable for clinical screening.
+
+In healthcare, **missing a high-risk patient is often more critical than a false alarm**, so threshold selection must align with clinical priorities.
 
 ---
 
 ## Limitations
-
-* High missingness in some variables (>90%)
-* Loss of temporal detail due to feature summarisation
-* No external validation dataset
+- High missingness (>90%) in some lab features  
+- Time-series summarisation reduces temporal detail  
+- No external validation dataset  
+- Mortality used as proxy for deterioration  
 
 ---
 
 ## Future Work
-
-* Use sequence models (LSTM / Transformers)
-* Incorporate missingness-aware modelling
-* Validate on external ICU datasets
+- Missingness-aware modelling  
+- Sequence models (LSTM / Transformers)  
+- Precision-Recall optimisation  
+- External validation  
+- Cost-sensitive learning  
 
 ---
 
 ## How to Run
 
-1. Clone the repository:
+```bash
 git clone https://github.com/Vgowtham009-lab/icu-prediction-project.git
 cd icu-prediction-project
-2. Install dependencies:
 pip install -r requirements.txt
-3. Download dataset from PhysioNet
-4. Place data in `/data/` directory
-5. Run the notebook:
+```
 
+Download dataset from PhysioNet and follow instructions in `data/README.md`.
+
+Run:
 ```bash
 jupyter notebook notebooks/icu_deterioration_prediction.ipynb
 ```
 
 ---
 
-## References (Harvard Style)
+## References
 
+Goldberger, A.L. et al. (2000) *PhysioBank, PhysioToolkit, and PhysioNet*. Circulation.  
 
-Silva, I. et al. (2012) *Predicting in-hospital mortality of ICU patients: The PhysioNet/Computing in Cardiology Challenge 2012*.
+Silva, I. et al. (2012) *Predicting in-hospital mortality of ICU patients*. Computing in Cardiology.  
 
-Chen, T. and Guestrin, C. (2016) *XGBoost: A Scalable Tree Boosting System*. arXiv.
+Chen, T. and Guestrin, C. (2016) *XGBoost: A Scalable Tree Boosting System*. KDD.  
 
 ---
 
 ## Author
-
-Gowtham Vaddanam | MSc Data Science | University of Hertfordshire
-
+**Gowtham Vaddanam**  
+MSc Data Science  
+University of Hertfordshire
